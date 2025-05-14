@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EXA Furniture</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: white;
+      color: #4f433d;
+      overflow-x: hidden;
+    }
+
+    .navbar-container {
+      background-color: #b8a68e;
+      padding: 10px 20px;
+      position: relative;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .navbar button {
+      background-color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 10px;
+      box-shadow: 2px 2px 0px #6d5f51;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .navbar button:hover {
+      background-color: #f3ede6;
+    }
+
+    .navbar button.active {
+      background-color: #6d5f51;
+      color: white;
+    }
+
+    .burger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .burger.open {
+      transform: rotate(90deg);
+    }
+
+    .title-section {
+      text-align: left;
+      padding: 40px 60px 20px;
+    }
+
+    .title-section h1 {
+      margin: 0;
+      font-size: 48px;
+      font-weight: 800;
+    }
+
+    .title-section h2 {
+      margin: 0;
+      font-size: 48px;
+      font-weight: 400;
+      color: transparent;
+      -webkit-text-stroke: 1px #4f433d;
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 90%;
+      max-width: 700px;
+      margin: 40px auto;
+      overflow: hidden;
+    }
+
+    .carousel-slide {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-slide img {
+      min-width: 100%;
+      border-radius: 20px;
+      object-fit: cover;
+    }
+
+    .carousel-buttons {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .carousel-buttons button {
+      background-color: rgba(0, 0, 0, 0.4);
+      border: none;
+      color: white;
+      font-size: 24px;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .bg-shapes {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(to right, #b29b7f, #e5ddc8, #a99770);
+      clip-path: polygon(0 0, 100% 100%, 0% 100%);
+      z-index: -1;
+    }
+
+    .corner-graphic {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+    }
+
+    .corner-graphic::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 60px;
+      border: 2px solid #b8a68e;
+      transform: rotate(45deg);
+    }
+
+    #produk-section, #tentang-section {
+      display: none;
+      padding: 40px 60px;
+    }
+
+    .produk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .produk-item {
+      background-color: #f3ede6;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .produk-item img {
+      max-width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .produk-item h3 {
+      margin: 10px 0 5px;
+    }
+
+    .harga {
+      font-weight: bold;
+      color: #6d5f51;
+      margin: 0;
+    }
+
+    .deskripsi {
+      font-size: 14px;
+      color: #4f433d;
+    }
+
+    @media (max-width: 768px) {
+      .burger {
+        display: block;
+      }
+
+      .navbar {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+      }
+
+      .navbar.show {
+        display: flex;
+      }
+
+      .title-section {
+        padding: 20px;
+        text-align: center;
+      }
+
+      .title-section h1,
+      .title-section h2 {
+        font-size: 36px;
+      }
+
+      .produk-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .produk-item img {
+        height: 150px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .title-section h1,
+      .title-section h2 {
+        font-size: 42px;
+      }
+
+      .produk-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar-container">
+    <button class="burger" id="burger">&#9776;</button>
+    <div class="navbar" id="navbar">
+      <button>BERANDA</button>
+      <button>PRODUK</button>
+      <button>TENTANG</button>
+    </div>
+  </div>
+
+  <div class="title-section">
+    <h1>EXA</h1>
+    <h2>FURNITURE</h2>
+  </div>
+
+  <div class="carousel-container">
+    <div class="carousel-slide" id="carousel-slide">
+      <img src="gambar 1.jpg" alt="Gambar 1">
+      <img src="gambar 2.jfif" alt="Gambar 2">
+      <img src="gambar 3.jfif" alt="Gambar 3">
+      <img src="gambar 4.jpg" alt="Gambar 4">
+    </div>
+    <div class="carousel-buttons">
+      <button id="prevBtn">&#10094;</button>
+      <button id="nextBtn">&#10095;</button>
+    </div>
+  </div>
+
+  <div id="produk-section">
+    <h2 style="font-size: 36px;">Produk Kami</h2>
+    <div class="produk-grid">
+      <div class="produk-item">
+        <img src="gambar kursi.jfif" alt="Kursi Kayu">
+        <h3>Kursi Kayu Jati</h3>
+        <p class="harga">Rp850.000</p>
+        <p class="deskripsi">Kursi elegan dari kayu jati asli, cocok untuk ruang tamu dan ruang makan.</p>
+      </div>
+      <div class="produk-item">
+        <img src="gambar meja.jpg" alt="Meja Minimalis">
+        <h3>Meja Minimalis</h3>
+        <p class="harga">Rp1.200.000</p>
+        <p class="deskripsi">Meja desain modern minimalis berbahan MDF berkualitas tinggi.</p>
+      </div>
+      <div class="produk-item">
+        <img src="gambar lemari.jpg" alt="Lemari Kayu">
+        <h3>Lemari Pakaian</h3>
+        <p class="harga">Rp2.500.000</p>
+        <p class="deskripsi">Lemari pakaian 2 pintu berbahan solid wood, cocok untuk kamar tidur Anda.</p>
+      </div>
+      <div class="produk-item">
+        <img src="gambar lampu.jfif" alt="Lampu Tidur">
+        <h3>Lampu Tidur</h3>
+        <p class="harga">Rp150.000</p>
+        <p class="deskripsi">Lampu tidur yang bisa diatur level kecerahannya dengan model estetis dan modern.</p>
+      </div>
+      <div class="produk-item">
+        <img src="gambar rak.jfif" alt="Rak Buku">
+        <h3>Rak Buku</h3>
+        <p class="harga">Rp500.000</p>
+        <p class="deskripsi">Rak Buku dinding dengan desain minimalis dan elegan.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="tentang-section">
+    <h2 style="font-size: 36px;">Tentang EXA Furniture</h2>
+    <p>
+      EXA Furniture adalah produsen dan penyedia furniture berkualitas tinggi yang berkomitmen pada desain elegan dan kenyamanan.
+      Kami menggabungkan keahlian tradisional dengan inovasi modern untuk menciptakan produk yang tahan lama dan estetis.
+    </p>
+  </div>
+
+  <div class="corner-graphic"></div>
+  <div class="bg-shapes"></div>
+
+  <script>
+    const slide = document.getElementById('carousel-slide');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const images = slide.querySelectorAll('img');
+    let index = 0;
+
+    function updateSlide() {
+      slide.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      index = (index + 1) % images.length;
+      updateSlide();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      index = (index - 1 + images.length) % images.length;
+      updateSlide();
+    });
+
+    const navbarButtons = document.querySelectorAll('.navbar button');
+    const btnBeranda = navbarButtons[0];
+    const btnProduk = navbarButtons[1];
+    const btnTentang = navbarButtons[2];
+    const produkSection = document.getElementById('produk-section');
+    const tentangSection = document.getElementById('tentang-section');
+    const carousel = document.querySelector('.carousel-container');
+    const title = document.querySelector('.title-section');
+
+    function setActive(button) {
+      navbarButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    }
+
+    btnBeranda.addEventListener('click', () => {
+      setActive(btnBeranda);
+      produkSection.style.display = 'none';
+      tentangSection.style.display = 'none';
+      carousel.style.display = 'block';
+      title.style.display = 'block';
+    });
+
+    btnProduk.addEventListener('click', () => {
+      setActive(btnProduk);
+      produkSection.style.display = 'block';
+      tentangSection.style.display = 'none';
+      carousel.style.display = 'none';
+      title.style.display = 'none';
+    });
+
+    btnTentang.addEventListener('click', () => {
+      setActive(btnTentang);
+      produkSection.style.display = 'none';
+      tentangSection.style.display = 'block';
+      carousel.style.display = 'none';
+      title.style.display = 'none';
+    });
+
+    const burger = document.getElementById('burger');
+    const navbar = document.getElementById('navbar');
+
+    burger.addEventListener('click', () => {
+      navbar.classList.toggle('show');
+      burger.classList.toggle('open');
+    });
+
+    setActive(btnBeranda);
+  </script>
+</body>
+</html>
